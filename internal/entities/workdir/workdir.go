@@ -37,6 +37,7 @@ type WorkDir struct {
 	Yaml       []string `json:"yaml"`
 	Generic    []string `json:"generic"`
 	Elixir     []string `json:"elixir"`
+	Erlang     []string `json:"erlang"`
 	Shell      []string `json:"shell"`
 	Dart       []string `json:"dart"`
 	Nginx      []string `json:"nginx"`
@@ -59,6 +60,7 @@ func NewWorkDir() *WorkDir {
 		Yaml:       []string{},
 		Generic:    []string{},
 		Elixir:     []string{},
+		Erlang:     []string{},
 		Shell:      []string{},
 		Dart:       []string{},
 		Nginx:      []string{},
@@ -108,6 +110,7 @@ func (w *WorkDir) LanguagePaths() map[languages.Language][]string {
 		languages.C:          w.C,
 		languages.Yaml:       w.Yaml,
 		languages.Elixir:     w.Elixir,
+		languages.Erlang:     w.Erlang,
 		languages.Shell:      w.Shell,
 		languages.Dart:       w.Dart,
 		languages.Nginx:      w.Nginx,
@@ -170,6 +173,9 @@ func (w *WorkDir) setEmptyOrSliceEmptyInNilContent() *WorkDir {
 	}
 	if w.Elixir == nil {
 		w.Elixir = []string{}
+	}
+	if w.Erlang == nil {
+		w.Erlang = []string{}
 	}
 	if w.Shell == nil {
 		w.Shell = []string{}

@@ -282,6 +282,7 @@ func (a *Analyzer) detectVulnerabilityFuncs() map[languages.Language]detectVulne
 		languages.PHP:        a.detectVulnerabilityPHP,
 		languages.Dart:       a.detectVulnerabilityDart,
 		languages.Elixir:     a.detectVulnerabilityElixir,
+		languages.Erlang:     a.detectVulnerabilityErlang,
 		languages.Shell:      a.detectVulnerabilityShell,
 		languages.Nginx:      a.detectVulnerabilityNginx,
 		languages.Swift:      a.detectVulneravilitySwift,
@@ -419,6 +420,22 @@ func (a *Analyzer) detectVulnerabilityDart(_ *sync.WaitGroup, projectSubPath str
 	return nil
 }
 
+func (a *Analyzer) detectVulnerabilityErlang(wg *sync.WaitGroup, projectSubPath string) error {
+	if err := a.docker.PullImage(a.getCustomOrDefaultImage(languages.Erlang)); err != nil {
+		return err
+	}
+	spawn(wg, mixaudit.NewFormatter(a.formatter), projectSubPath)
+	sobelow.NewFormatter(a.formatter).StartAnalysis(projectSubPath)
+	return nil
+}
+
+func (a *Analyzer) detectVulnerabilityShell(_ *sync.WaitGroup, projectSubPath string) error {
+	if err := a.docker.PullImage(a.getCustomOrDefaultImage(languages.Shell)); err != nil {
+		return err
+	}
+	shellcheck.NewFormatter(a.formatter).StartAnalysis(projectSubPath)
+	return nil
+}
 func (a *Analyzer) detectVulnerabilityElixir(wg *sync.WaitGroup, projectSubPath string) error {
 	if err := a.docker.PullImage(a.getCustomOrDefaultImage(languages.Elixir)); err != nil {
 		return err
